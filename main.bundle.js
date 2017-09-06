@@ -142,8 +142,9 @@ AppRoutingModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_octicons__ = __webpack_require__("../../../../octicons/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_octicons___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_octicons__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_octicons__ = __webpack_require__("../../../../octicons/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_octicons___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_octicons__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -162,6 +163,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AppComponent = (function () {
     function AppComponent(http, router, activatedRoute, titleService) {
         var _this = this;
@@ -172,13 +174,12 @@ var AppComponent = (function () {
         this.isUrlInitialized = false;
         this.hash = location.hash;
         this.menuExamples = false;
+        this.openNav = true;
+        this.mode = 'side';
         router.events
             .filter(function (event) { return event instanceof __WEBPACK_IMPORTED_MODULE_6__angular_router__["b" /* NavigationStart */]; })
             .subscribe(function (event) {
-            // if (!this.isUrlInitialized) {
             _this.menuExamples = event.url.includes('examples');
-            // this.isUrlInitialized = true;
-            // }
         });
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -198,7 +199,11 @@ var AppComponent = (function () {
             if (_this.hash.length < 1) {
                 _this.content.nativeElement.parentElement.scrollTop = 0;
             }
+            if (window.innerWidth <= 767) {
+                _this.sidenav.close();
+            }
         });
+        this.setMode(window.innerWidth);
     };
     AppComponent.prototype.getYear = function () {
         var date = new Date();
@@ -207,22 +212,38 @@ var AppComponent = (function () {
     AppComponent.prototype.toggleMenuExample = function () {
         this.menuExamples = !this.menuExamples;
     };
+    AppComponent.prototype.setMode = function (size) {
+        this.mode = size <= 767 ? 'over' : 'side';
+        if (size > 767 && !this.openNav) {
+            this.sidenav.open();
+        }
+        else if (size <= 767 && this.openNav) {
+            this.sidenav.close();
+        }
+    };
+    AppComponent.prototype.onResize = function (event) {
+        this.setMode(event.target.innerWidth);
+    };
     return AppComponent;
 }());
 __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__angular_core__["_11" /* ViewChild */])('content'),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_core__["M" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_core__["M" /* ElementRef */]) === "function" && _a || Object)
 ], AppComponent.prototype, "content", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__angular_core__["_11" /* ViewChild */])('sidenav'),
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_7__angular_material__["H" /* MdSidenav */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__angular_material__["H" /* MdSidenav */]) === "function" && _b || Object)
+], AppComponent.prototype, "sidenav", void 0);
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__angular_core__["_12" /* Component */])({
         selector: 'app-root',
         encapsulation: __WEBPACK_IMPORTED_MODULE_3__angular_core__["p" /* ViewEncapsulation */].None,
-        template: "\n    <nav class=\"docs-topbar mat-elevation-z6\">\n      <a md-button routerLink=\"/\" routerLinkActive=\"\" title=\"Handsontable for Angular\">Handsontable for Angular</a>\n      <div class=\"flex-spacer\"></div>\n      <a md-button href=\"https://github.com/handsontable/angular-handsontable\" title=\"Find us on GitHub\" target=\"_blank\">\n      " + __WEBPACK_IMPORTED_MODULE_7_octicons__["mark-github"].toSVG({ width: 21, height: 21, style: 'vertical-align: -6px; margin-right: 5px;' }) + " <span>Github " + __WEBPACK_IMPORTED_MODULE_7_octicons__["link-external"].toSVG() + "</span></a>\n    </nav>\n    <md-sidenav-container>\n      <md-sidenav mode=\"side\" opened=\"true\">\n        <nav class=\"docs-nav\">\n          <ul>\n            <li><a md-button [routerLinkActiveOptions]=\"{ exact: true }\" routerLink=\"/\" routerLinkActive=\"active\">Introduction</a></li>\n            <li><a md-button routerLink=\"/quick-start\" routerLinkActive=\"active\">Quick start</a></li>\n            <li><a md-button routerLink=\"/use-with-pro\" routerLinkActive=\"active\">Use with Pro version</a></li>\n            <li>\n              <button md-button class=\"btn-block\" [ngClass]=\"{'open': menuExamples}\" (click)=toggleMenuExample()>\n              Examples <span class=\"label label-inverted\">" + __WEBPACK_IMPORTED_MODULE_7_octicons__["kebab-vertical"].toSVG() + "</span></button>\n              <ul class=\"docs-nav--sub\">\n                <li><a md-button routerLink=\"/examples/settings-object\" routerLinkActive=\"active\">By settings object</a></li>\n                <li><a md-button routerLink=\"/examples/declarative-way\" routerLinkActive=\"active\">By using bindings</a></li>\n                <li><a md-button routerLink=\"/examples/static-columns\" routerLinkActive=\"active\">Column component</a></li>\n                <li><a md-button routerLink=\"/examples/dynamic-columns\" routerLinkActive=\"active\">Dynamic columns</a></li>\n                <li><a md-button routerLink=\"/examples/access-to-handsontable\" routerLinkActive=\"active\">Access to Handsontable</a></li>\n                <li><a md-button routerLink=\"/examples/hooks\" routerLinkActive=\"active\">Hook support</a></li>\n                <li><a md-button routerLink=\"/examples/remote-data\" routerLinkActive=\"active\">Remote data</a></li>\n              </ul>\n            </li>\n            <li><a md-button href=\"https://docs.handsontable.com/Core.html\" target=\"_blank\">\n              API Reference <span class=\"label label-inverted\">" + __WEBPACK_IMPORTED_MODULE_7_octicons__["link-external"].toSVG() + "</span></a></li>\n            <li><a md-button routerLink=\"/license\" routerLinkActive=\"active\">License</a></li>\n            <li><a md-button routerLink=\"/support\" routerLinkActive=\"active\">Support</a></li>\n            <li><a md-button routerLink=\"/more-wrappers\" routerLinkActive=\"active\">More wrappers</a></li>\n          </ul>\n        </nav>\n      </md-sidenav>\n      <div #content id=\"content\">\n        <router-outlet></router-outlet>\n        <footer class=\"docs-footer\">\n          <div class=\"flex-spacer\"></div>\n          <div class=\"docs-footer-copyright\">\n            <p>Handsoncode &copy; {{getYear()}}. Code licensed under an <a routerLink=\"/license\">MIT-style License</a>.\n            Documentation licensed under <a href=\"http://creativecommons.org/licenses/by/4.0/\" rel=\"nofollow\" target=\"_blank\">CC BY 4.0</a>.</p>\n          </div>\n        </footer>\n      </div>\n    </md-sidenav-container>\n  "
+        template: "\n    <nav class=\"docs-topbar mat-elevation-z6\">\n      <a md-button class=\"logo\" routerLink=\"/\" routerLinkActive=\"\" title=\"Handsontable for Angular\">Handsontable for Angular</a>\n      <button md-button class=\"three-bars\" (click)=\"sidenav.toggle()\">" + __WEBPACK_IMPORTED_MODULE_8_octicons__["three-bars"].toSVG() + "</button>\n      <div class=\"flex-spacer\"></div>\n      <a md-button class=\"icon-gh\" href=\"https://github.com/handsontable/angular-handsontable\" title=\"Find us on GitHub\" target=\"_blank\">\n      " + __WEBPACK_IMPORTED_MODULE_8_octicons__["mark-github"].toSVG({ width: 21, height: 21, style: 'vertical-align: -6px; margin-right: 5px;' }) + " <span>Github " + __WEBPACK_IMPORTED_MODULE_8_octicons__["link-external"].toSVG() + "</span></a>\n    </nav>\n    <md-sidenav-container (window:resize)=\"onResize($event)\">\n      <md-sidenav #sidenav [mode]=\"mode\" [opened]=\"openNav\">\n        <nav class=\"docs-nav\">\n          <ul>\n            <li><a md-button [routerLinkActiveOptions]=\"{ exact: true }\" routerLink=\"/\" routerLinkActive=\"active\">Introduction</a></li>\n            <li><a md-button routerLink=\"/quick-start\" routerLinkActive=\"active\">Quick start</a></li>\n            <li><a md-button routerLink=\"/use-with-pro\" routerLinkActive=\"active\">Use with Pro version</a></li>\n            <li>\n              <button md-button class=\"btn-block\" [ngClass]=\"{'open': menuExamples}\" (click)=toggleMenuExample()>\n              Examples <span class=\"label label-inverted\">" + __WEBPACK_IMPORTED_MODULE_8_octicons__["kebab-vertical"].toSVG() + "</span></button>\n              <ul class=\"docs-nav--sub\">\n                <li><a md-button routerLink=\"/examples/settings-object\" routerLinkActive=\"active\">By settings object</a></li>\n                <li><a md-button routerLink=\"/examples/declarative-way\" routerLinkActive=\"active\">By using bindings</a></li>\n                <li><a md-button routerLink=\"/examples/static-columns\" routerLinkActive=\"active\">Column component</a></li>\n                <li><a md-button routerLink=\"/examples/dynamic-columns\" routerLinkActive=\"active\">Dynamic columns</a></li>\n                <li><a md-button routerLink=\"/examples/access-to-handsontable\" routerLinkActive=\"active\">Access to Handsontable</a></li>\n                <li><a md-button routerLink=\"/examples/hooks\" routerLinkActive=\"active\">Hook support</a></li>\n                <li><a md-button routerLink=\"/examples/remote-data\" routerLinkActive=\"active\">Remote data</a></li>\n              </ul>\n            </li>\n            <li><a md-button href=\"https://docs.handsontable.com/Core.html\" target=\"_blank\">\n              API Reference <span class=\"label label-inverted\">" + __WEBPACK_IMPORTED_MODULE_8_octicons__["link-external"].toSVG() + "</span></a></li>\n            <li><a md-button routerLink=\"/license\" routerLinkActive=\"active\">License</a></li>\n            <li><a md-button routerLink=\"/support\" routerLinkActive=\"active\">Support</a></li>\n            <li><a md-button routerLink=\"/more-wrappers\" routerLinkActive=\"active\">More wrappers</a></li>\n          </ul>\n        </nav>\n      </md-sidenav>\n      <div #content id=\"content\">\n        <router-outlet></router-outlet>\n        <footer class=\"docs-footer\">\n          <div class=\"flex-spacer\"></div>\n          <div class=\"docs-footer-copyright\">\n            <p>Handsoncode &copy; {{getYear()}}. Code licensed under an <a routerLink=\"/license\">MIT-style License</a>.\n            Documentation licensed under <a href=\"http://creativecommons.org/licenses/by/4.0/\" rel=\"nofollow\" target=\"_blank\">CC BY 4.0</a>.</p>\n          </div>\n        </footer>\n      </div>\n    </md-sidenav-container>\n  "
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClient */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_6__angular_router__["d" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_router__["d" /* Router */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_6__angular_router__["e" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_router__["e" /* ActivatedRoute */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["b" /* Title */]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClient */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_6__angular_router__["d" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_router__["d" /* Router */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_6__angular_router__["e" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_router__["e" /* ActivatedRoute */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["b" /* Title */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["b" /* Title */]) === "function" && _f || Object])
 ], AppComponent);
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
