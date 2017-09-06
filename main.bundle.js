@@ -1507,7 +1507,7 @@ var UseWithProComponent = (function () {
     function UseWithProComponent() {
         this.example = [
             "\"paths\": {",
-            "  \"handsontable\": [\"../node_modules/handsontable-pro\"]",
+            "  \"handsontable\": [\"../node_modules/handsontable-pro/dist/handsontable.js\"]",
             "}",
         ].join('\n');
     }
