@@ -1435,7 +1435,7 @@ var QuickStartComponent = (function () {
     function QuickStartComponent() {
         this.example3 = [
             "",
-            "import 'handsontable/dist/handsontable';",
+            "import 'handsontable';",
             "",
             "/*********************************************************",
             "* Zone JS is required by Angular itself.",
