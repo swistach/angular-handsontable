@@ -1018,35 +1018,16 @@ var ExRemoteDataComponent = (function () {
     function ExRemoteDataComponent(_http) {
         var _this = this;
         this._http = _http;
-        this.dataSchema = {
-            "ShipName": null,
-            "ShipAddress": null,
-            "ShipCity": null,
-            "ShipRegion": null,
-            "ShipPostalCode": null,
-            "ShipCountry": null,
-            "CustomerID": null,
-            "CustomerName": null,
-            "Address": null,
-            "City": null,
-            "Region": null,
-            "PostalCode": null,
-            "Country": null,
-            "Salesperson": null,
-            "OrderID": null,
-            "OrderDate": null,
-            "RequiredDate": null,
-            "ShippedDate": null,
-            "ShipperName": null,
-            "ProductID": null,
-            "ProductName": null,
-            "UnitPrice": null,
-            "Quantity": null,
-            "Discount": null,
-            "ExtendedPrice": null,
-            "Freight": null
-        };
-        this.colHeaders = Object.keys(this.dataSchema);
+        this.columns = [
+            { data: 'id', title: 'Id' },
+            { data: 'airdate', title: 'AirDate' },
+            { data: 'airtime', title: 'AirTime' },
+            { data: 'name', title: 'Name', width: 200 },
+            { data: 'number', title: 'Number' },
+            { data: 'runtime', title: 'Runtime' },
+            { data: 'season', title: 'Season' },
+            { data: 'summary', title: 'Summary', renderer: 'html', width: 800 },
+        ];
         this.settings = {
             afterLoadData: function (firstLoad) {
                 if (!firstLoad) {
@@ -1088,35 +1069,16 @@ var ExRemoteDataComponent = (function () {
                 "})",
                 "export class AppComponent {",
                 "  data: any[];",
-                "  dataSchema: object = {",
-                "    \"ShipName\": null,",
-                "    \"ShipAddress\": null,",
-                "    \"ShipCity\": null,",
-                "    \"ShipRegion\": null,",
-                "    \"ShipPostalCode\": null,",
-                "    \"ShipCountry\": null,",
-                "    \"CustomerID\": null,",
-                "    \"CustomerName\": null,",
-                "    \"Address\": null,",
-                "    \"City\": null,",
-                "    \"Region\": null,",
-                "    \"PostalCode\": null,",
-                "    \"Country\": null,",
-                "    \"Salesperson\": null,",
-                "    \"OrderID\": null,",
-                "    \"OrderDate\": null,",
-                "    \"RequiredDate\": null,",
-                "    \"ShippedDate\": null,",
-                "    \"ShipperName\": null,",
-                "    \"ProductID\": null,",
-                "    \"ProductName\": null,",
-                "    \"UnitPrice\": null,",
-                "    \"Quantity\": null,",
-                "    \"Discount\": null,",
-                "    \"ExtendedPrice\": null,",
-                "    \"Freight\": null",
-                "  };",
-                "  colHeaders: string[] = Object.keys(this.dataSchema);",
+                "  columns: object[] = [",
+                "    {data: 'id', title: 'Id'},",
+                "    {data: 'airdate', title: 'AirDate'},",
+                "    {data: 'airtime', title: 'AirTime'},",
+                "    {data: 'name', title: 'Name', width: 200},",
+                "    {data: 'number', title: 'Number'},",
+                "    {data: 'runtime', title: 'Runtime'},",
+                "    {data: 'season', title: 'Season'},",
+                "    {data: 'summary', title: 'Summary', renderer: 'html', width: 800},",
+                "  ];",
                 "  settings: object = {",
                 "    afterLoadData: (firstLoad) => {",
                 "      if(!firstLoad) {",
@@ -1131,9 +1093,9 @@ var ExRemoteDataComponent = (function () {
                 "  loadData() {",
                 "    this.isLoading = true;",
                 "",
-                '    this._http.get(`//services.odata.org/V3/Northwind/Northwind.svc/Invoices`)',
+                '    this._http.get(`//api.tvmaze.com/singlesearch/shows?q=mr-robot&embed=episodes`)',
                 "      .subscribe((res: Response) => {",
-                "        this.data = res['value'];",
+                "        this.data = res['_embedded']['episodes'];",
                 "      });",
                 "  }",
                 "}",
@@ -1142,12 +1104,14 @@ var ExRemoteDataComponent = (function () {
                 "<button (click)=\"loadData()\">Load data</button>",
                 "<p [hidden]=\"!isLoading\">Loading...</p>",
                 "<hot-table",
-                "  height=\"500\"",
+                "  height=\"295\"",
                 "  fixedColumnsLeft=\"1\"",
+                "  startRows=\"15\"",
+                "  colWidths=\"100\"",
                 "  [settings]=\"settings\"",
                 "  [rowHeaders]=\"true\"",
-                "  [colHeaders]=\"colHeaders\"",
-                "  [dataSchema]=\"dataSchema\"",
+                "  [colHeaders]=\"true\"",
+                "  [columns]=\"columns\"",
                 "  [data]=\"data\"></hot-table>",
             ].join('\n'),
         ];
@@ -1155,16 +1119,16 @@ var ExRemoteDataComponent = (function () {
     ExRemoteDataComponent.prototype.loadData = function () {
         var _this = this;
         this.isLoading = true;
-        this._http.get("//services.odata.org/V3/Northwind/Northwind.svc/Invoices")
+        this._http.get("//api.tvmaze.com/singlesearch/shows?q=mr-robot&embed=episodes")
             .subscribe(function (res) {
-            _this.data = res['value'];
+            _this.data = res['_embedded']['episodes'];
         });
     };
     return ExRemoteDataComponent;
 }());
 ExRemoteDataComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* Component */])({
-        template: "\n    <div class=\"docs-content\">\n      <h1>Bind Handsontable to a remote data source</h1>\n      \n      <h2>Setup a module</h2>\n      <p>Add an <code>HttpClientModule</code> module to the main module to handle the asynchronous requests.</p>\n      <docs-code lang=\"typescript\" title=\"/src/app/app.module.ts\" start='1' [input]=\"examples[0]\"></docs-code>\n\n      <h2>Setup a component</h2>\n      <p>Except for the code responsible for all the logic behind your app, you need to import\n        an <code>HttpClient</code> class to be able to handle asynchronous requests from/to the server.</p>\n      <docs-code lang=\"typescript\" title=\"/src/app/app.component.ts\" start='1' [input]=\"examples[1]\"></docs-code>\n\n      <h2>Template</h2>\n      <p>Define the options and their attributes as you like. Every change of the <code>data</code>\n        attribute will result in loading a new set of data to the Handsontable instance (exactly\n        the same as using <code>loadData()</code> manually).</p>\n      <docs-code lang=\"html\" title=\"/src/app/app.component.html\" start='1' [input]=\"examples[2]\"></docs-code>\n\n      <h2>The result</h2>\n      <p>\n        <button md-raised-button (click)=\"loadData()\">Load data</button>\n      </p>\n      <p [hidden]=\"!isLoading\">\n        <md-progress-bar mode=\"indeterminate\"></md-progress-bar>\n      </p>\n      <hot-table\n        height=\"300\"\n        fixedColumnsLeft=\"1\"\n        startRows=\"15\"\n        [settings]=\"settings\"\n        [rowHeaders]=\"true\"\n        [colHeaders]=\"colHeaders\"\n        [dataSchema]=\"dataSchema\"\n        [data]=\"data\"></hot-table>\n      \n    </div>\n  "
+        template: "\n    <div class=\"docs-content\">\n      <h1>Bind Handsontable to a remote data source</h1>\n      \n      <h2>Setup a module</h2>\n      <p>Add an <code>HttpClientModule</code> module to the main module to handle the asynchronous requests.</p>\n      <docs-code lang=\"typescript\" title=\"/src/app/app.module.ts\" start='1' [input]=\"examples[0]\"></docs-code>\n\n      <h2>Setup a component</h2>\n      <p>Except for the code responsible for all the logic behind your app, you need to import\n        an <code>HttpClient</code> class to be able to handle asynchronous requests from/to the server.</p>\n      <docs-code lang=\"typescript\" title=\"/src/app/app.component.ts\" start='1' [input]=\"examples[1]\"></docs-code>\n\n      <h2>Template</h2>\n      <p>Define the options and their attributes as you like. Every change of the <code>data</code>\n        attribute will result in loading a new set of data to the Handsontable instance (exactly\n        the same as using <code>loadData()</code> manually).</p>\n      <docs-code lang=\"html\" title=\"/src/app/app.component.html\" start='1' [input]=\"examples[2]\"></docs-code>\n\n      <h2>The result</h2>\n      <p>\n        <button md-raised-button (click)=\"loadData()\">Load data</button>\n      </p>\n      <p [hidden]=\"!isLoading\">\n        <md-progress-bar mode=\"indeterminate\"></md-progress-bar>\n      </p>\n      <hot-table\n        height=\"295\"\n        fixedColumnsLeft=\"1\"\n        startRows=\"15\"\n        colWidths=\"100\"\n        [settings]=\"settings\"\n        [rowHeaders]=\"true\"\n        [colHeaders]=\"true\"\n        [columns]=\"columns\"\n        [data]=\"data\"></hot-table>\n    </div>\n  "
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]) === "function" && _a || Object])
 ], ExRemoteDataComponent);
